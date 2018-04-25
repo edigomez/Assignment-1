@@ -1,0 +1,47 @@
+plsql.execute <<-SQL
+ -- CREACION TABLESPACE SIN PUNTO Y COMA
+ -- EJEMPLO CREATE TABLESPACE ...
+ CREATE TABLESPACE mid_term DATAFILE 'c:\parcial1\edilber.dbf' SIZE 20M;
+SQL
+
+plsql.execute <<-SQL
+ -- CREACION PERFIL SIN PUNTO Y COMA
+ -- EJEMPLO CREATE PROFILE ...
+ 
+ CREATE PROFILE exam LIMIT 
+  IDLE_TIME 5
+	FAILED_LOGIN_ATTEMPTS 2;
+ 
+SQL
+
+plsql.execute <<-SQL
+ -- CREACION USUARIO SIN PUNTO Y COMA
+ -- EJEMPLO CREATE USER
+ 
+ CREATE USER ejercicios 
+    IDENTIFIED BY parcial1 
+    DEFAULT TABLESPACE mid_term 
+    QUOTA UNLIMITED ON mid_term 
+    PROFILE exam;
+ 
+SQL
+
+plsql(:data).execute <<-SQL
+ -- CREACION VISTA 1 SIN PUNTO Y COMA
+ -- EJEMPLO CREATE VIEW ...
+SQL
+
+plsql(:data).execute <<-SQL
+ -- CREACION VISTA 2 SIN PUNTO Y COMA
+ -- EJEMPLO CREATE VIEW ...
+SQL
+
+plsql(:data).execute <<-SQL
+ -- CREACION VISTA 3 SIN PUNTO Y COMA
+ -- EJEMPLO CREATE VIEW ...
+SQL
+
+plsql(:data).execute <<-SQL
+ -- CREACION VISTA 4 SIN PUNTO Y COMA
+ -- EJEMPLO CREATE VIEW ...
+SQL
