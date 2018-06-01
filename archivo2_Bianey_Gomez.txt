@@ -1,47 +1,39 @@
 plsql.execute <<-SQL
- -- CREACION TABLESPACE SIN PUNTO Y COMA
- -- EJEMPLO CREATE TABLESPACE ...
- CREATE TABLESPACE mid_term DATAFILE 'c:\parcial1\edilber.dbf' SIZE 20M;
-SQL
-
-plsql.execute <<-SQL
- -- CREACION PERFIL SIN PUNTO Y COMA
- -- EJEMPLO CREATE PROFILE ...
  
- CREATE PROFILE exam LIMIT 
-  IDLE_TIME 5
-	FAILED_LOGIN_ATTEMPTS 2;
- 
-SQL
+CREATE OR REPLACE PROCEDURE CALCULAR_SIMULACION (interes_nominal Decimal,numero_cuota number,monto_de_prestamo decimal)AS
+abono_interes decimal (15,2);
+abono_capital decimal (15,2);
+saldo decimal(15,2);
+porcentaje Decimal(15,4);
+cuota_mensual decimal(15,2);
+y decimal (15,4);
+x decimal (15,4);
+valor_actual number;
+contador number;
 
-plsql.execute <<-SQL
- -- CREACION USUARIO SIN PUNTO Y COMA
- -- EJEMPLO CREATE USER
- 
- CREATE USER ejercicios 
-    IDENTIFIED BY parcial1 
-    DEFAULT TABLESPACE mid_term 
-    QUOTA UNLIMITED ON mid_term 
-    PROFILE exam;
- 
-SQL
+BEGIN
+delete from amortizacion;
+tasa:= interes_nominal/100;
+saldo:=monto_de_prestamo;
+valor_actual:=numero_cuota;
 
-plsql(:data).execute <<-SQL
- -- CREACION VISTA 1 SIN PUNTO Y COMA
- -- EJEMPLO CREATE VIEW ...
-SQL
+y:=tasa*saldo;
+x:= 1 - POWER((1 + tasa), ( -_cuotas));
 
-plsql(:data).execute <<-SQL
- -- CREACION VISTA 2 SIN PUNTO Y COMA
- -- EJEMPLO CREATE VIEW ...
-SQL
+cuota_mensual:=y/x;
+contador:=1;
+while contador<=numero_cuota
+LOOP
 
-plsql(:data).execute <<-SQL
- -- CREACION VISTA 3 SIN PUNTO Y COMA
- -- EJEMPLO CREATE VIEW ...
-SQL
+abono_interes := tasa * saldo;
+abono_capital := cuota_mensual - abono_interes;
+saldo:= saldo-abono_capital;
 
-plsql(:data).execute <<-SQL
- -- CREACION VISTA 4 SIN PUNTO Y COMA
- -- EJEMPLO CREATE VIEW ...
+Insert INTO amortizacion (numero_cuota ,cuota_mensual ,abono_capital ,abono_interes ,saldo)
+Values(valor_actual,cuota_mensual,abono_capital,abono_interes,saldo);
+
+valor_actual:= valor_actuall-1;
+contador:=contador +1;
+END LOOP;
+END;
 SQL
